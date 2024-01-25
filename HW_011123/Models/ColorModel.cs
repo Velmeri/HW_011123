@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace HW_011123.Models
 {
-	public class ColorModel
+	public class ColorModel : IEquatable<ColorModel>
 	{
+		/// <summary>
+		/// Представляет цвет в модели ARGB (Альфа, Красный, Зелёный, Синий).
+		/// </summary>
+
 		public byte Alpha { get; set; }
 		public byte Red { get; set; }
 		public byte Green { get; set; }
@@ -28,30 +32,43 @@ namespace HW_011123.Models
 			Blue = blue;
 		}
 
-		public static bool operator ==(ColorModel A, ColorModel B)
+		public static bool operator ==(ColorModel a, ColorModel b)
 		{
-			return
-				A.Alpha == B.Alpha &&
-				A.Blue == B.Blue &&
-				A.Red == B.Red &&
-				A.Green == B.Green;
+			if (ReferenceEquals(a, b)) {
+				return true;
+			}
+
+			if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) {
+				return false;
+			}
+
+			return a.Equals(b);
 		}
-		public static bool operator !=(ColorModel A, ColorModel B)
+
+		public static bool operator !=(ColorModel a, ColorModel b)
 		{
-			return 
-				A.Alpha != B.Alpha ||
-				A.Blue != B.Blue ||
-				A.Red != B.Red ||
-				A.Green	!= B.Green;
+			return !(a == b);
 		}
 
 		public override bool Equals(object obj)
 		{
-			return obj is ColorModel model &&
-				   Alpha == model.Alpha &&
-				   Red == model.Red &&
-				   Green == model.Green &&
-				   Blue == model.Blue;
+			if (obj is ColorModel other) {
+				return Equals(other);
+			}
+
+			return false;
+		}
+
+		public bool Equals(ColorModel other)
+		{
+			if (other is null) {
+				return false;
+			}
+
+			return Alpha == other.Alpha &&
+				   Red == other.Red &&
+				   Green == other.Green &&
+				   Blue == other.Blue;
 		}
 
 		public override int GetHashCode()
